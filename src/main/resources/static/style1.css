@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,200&display=swap');
+*{
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+body{
+    /* background-color: #F2F4F9; */
+    padding: 2rem 2rem  2rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+    min-height:100vh;
+    margin: 0;
+    background-color: whitesmoke;
+ 
+}
+.vote{
+    background-color: white;
+    box-shadow: 1px 1px  10px 5px rgba(209, 192, 192, 0.5); 
+    padding:2rem;
+    width: 800px;
+
+}
+.title h2{
+    margin: 0;
+    margin-bottom: 1rem;
+}
+.form-vote{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5rem;
+}
+label{
+    margin-left: 1rem;
+}
+
+label, .radio{
+    cursor: pointer;
+}
+.form-vote, label,input{
+    font-size: 1.2rem ;
+}
+.radio{
+    display: inline-flex;
+    flex-direction: column;
+}
+.vote-details{
+    display: flex;
+    width: 25%;
+    justify-content: space-between;
+    align-items: center;
+}
+.vote-details small{
+    color: gray;
+    border-radius: 0.4rem;
+}
+.vote-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.vote-button button{
+    color: white;
+    background-color: rebeccapurple;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-radius: 0.35rem;
+    border: none;
+    cursor: pointer;
+}
+@media screen and (max-width: 768px) {
+   body, .vote-details, .vote{
+        flex-wrap: wrap;
+        width: 100%;
+    }
+ }

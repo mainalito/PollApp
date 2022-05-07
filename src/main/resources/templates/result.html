@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poll App</title>
+    
+    <link rel="stylesheet" th:href="@{/style.css}" />
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="box">
+        <h2 th:text="${polls.title}"></h2>
+        <ul th:each="result: ${result}">
+          <li th:text="${result.chosen} + ' - ' + ${result.points}"></li>
+        </ul>
+        <div class="points" th:each="p: ${highestPoints}">
+          <ul>
+            <li
+              th:text="'The winner is ' +  ${p.chosen} + ' - ' + ${p.points}"
+            ></li>
+          </ul>
+        </div>
+        <!-- <p> Winner is <strong th:text = "${highestPoints}"></strong> </p> -->
+        <p>Total votes <strong th:text="${totalPoints}"></strong></p>
+      </div>
+      <canvas class="chart" id="chart" width="100px" height="50px"></canvas>
+    </div>
+    <!-- <link rel="stylesheet" th:href="@{/css/font-awesome.css}"> -->
+    <script
+      th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js}"
+      integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+
+      const dataSet = /*[[${result}]]*/ "";
+      const poll = /*[[${polls}]]*/ "";
+      
+      async function createChart() {
+        console.log(poll);
+        const data =  await getData();
+        const ctx = document.getElementById("chart")
+         .getContext("2d");
+
+        const myChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: data.xs,
+            datasets: [
+              {
+                label: poll.title,
+                data: data.ys,
+                backgroundColor: [
+                  "rgba(255, 99, 132, 0.2)",
+                  "rgba(54, 162, 235, 0.2)",
+                  "rgba(255, 206, 86, 0.2)",
+                  "rgba(75, 192, 192, 0.2)",
+                  "rgba(153, 102, 255, 0.2)",
+                  "rgba(255, 159, 64, 0.2)",
+                ],
+                borderColor: [
+                  "rgba(255, 99, 132, 1)",
+                  "rgba(54, 162, 235, 1)",
+                  "rgba(255, 206, 86, 1)",
+                  "rgba(75, 192, 192, 1)",
+                  "rgba(153, 102, 255, 1)",
+                  "rgba(255, 159, 64, 1)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      }
+
+      function getData() {
+        const xs = [];
+        const ys = [];
+        dataSet.forEach((r) => {
+          const points = r.points;
+          const chosen = r.chosen;
+          xs.push(chosen);
+          ys.push(points);
+          console.log(points, chosen);
+        });
+        return { xs, ys };
+      }
+      createChart();
+
+      /*]]>*/
+    </script>
+  </body>
+</html>

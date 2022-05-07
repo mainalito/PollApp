@@ -1,0 +1,49 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link th:href="@{/css/bootstrap-grid.min.css}">
+
+	<title>Poll App</title>
+</head>
+
+<body>
+	<div class="container p-5">
+		<h1>Poll app web</h1>
+		<form action="#" th:action="@{/addResult}" method="post" th:object="${polls}">
+			<div class="mb-3">
+				<label for="exampleInputEmail1" class="form-label">Title</label>
+				<input type="text" th:field="*{title}" class="form-control" id="exampleInputEmail1"
+					aria-describedby="emailHelp">
+			</div>
+			<h3>
+				<small class="text-muted">Options:</small>
+			</h3>
+			<div class="mb-3">
+				<label for="exampleInputEmail1" class="form-label">Option 1</label>
+				<input type="text" th:field="*{option1}" class="form-control" id="exampleInputEmail1"
+					aria-describedby="emailHelp">
+			</div>
+			<div class="mb-3">
+				<label for="exampleInputEmail1" class="form-label">Option 2</label>
+				<input type="text"  th:field="*{option2}" class="form-control" id="exampleInputEmail1"
+					aria-describedby="emailHelp">
+			</div>
+			<div class="mb-3">
+				<label for="exampleInputEmail1" class="form-label">Option 3</label>
+				<input type="text" th:field="*{option3}" class="form-control" id="exampleInputEmail1"
+					aria-describedby="emailHelp">
+			</div>
+			<button class="btn btn-primary" type="submit">Add Note</button>
+		</form>
+	</div>
+	
+</body>
+
+</html>

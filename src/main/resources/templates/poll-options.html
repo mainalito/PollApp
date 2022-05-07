@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Poll App</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" th:href="@{/css/font-awesome.css}">
+	<link rel="stylesheet" th:href="@{/style1.css}">
+	
+</head>
+
+<body>
+	<!-- <section class="p-5 p-3 mb-2 bg-light text-dark">
+		<div class="container ">
+			<div class="card text-white bg-dark mb-3 p-2" style="max-width: 100%;">
+				<form method="POST" th:each="poll: ${pollsFetched}" th:action="@{|/poll/${pollsFetched.id}/vote|}" th:object="${results}">
+					<div class="card-body" >
+						<p class="card-text" th:text="${poll.title}"></p>
+						<input type="hidden" th:field=*{id}>
+						 <input type="hidden" th:field=*{poll.id}> 
+						<input class="form-check-input" type="radio"th:field="*{chosen}"  name="flexRadioDefault" th:value="${poll.option1}"
+							th:text="${poll.option1}" id="flexRadioDefault1">
+						<p class="card-text"></p>
+						<input class="form-check-input" type="radio" th:field="*{chosen}"  th:value="${poll.option2}"
+							th:text="${poll.option2}" name="flexRadioDefault" id="flexRadioDefault1">
+						<p class="card-text"></p>
+						<input class="form-check-input" th:field="*{chosen}"type="radio" th:value="${poll.option3}"
+							th:text="${poll.option3}" name="flexRadioDefault" id="flexRadioDefault1">
+						<p class="card-text"></p>
+						<button  type="submit" class="btn btn-primary">Vote</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section> -->
+	<div class="vote" >
+		<form method="post" th:each="poll: ${pollsFetched}" th:action="@{|/poll/${pollsFetched.id}/vote|}" th:object="${results}">
+				<input type="hidden" th:field=*{id} >
+				<div class="title">
+					<h2 th:text="${poll.title}"></h2>
+
+				</div>
+			
+		
+				<div class="form-vote">
+					<input type="radio" name="code" id="" class="radio" th:field="*{chosen}" th:value="${poll.option1}"
+					>
+					<div class="radio-radio"></div>
+					<label for="" th:text="${poll.option1}"> Java </label>
+	
+				</div>
+				<div class="form-vote">
+					<input type="radio" name="code" id="" class="radio" th:field="*{chosen}"  th:value="${poll.option2}"
+					>
+					<div class="radio-radio"></div>
+					<label for="" th:text="${poll.option2}"> Python </label>
+				</div>
+				<div class="form-vote">
+					<input type="radio" name="code" id="" class="radio" th:field="*{chosen}" th:value="${poll.option3}"
+					>
+					<div class="radio-radio"></div>
+					<label for="" th:text="${poll.option3}"> Go </label>
+				</div>
+				<div class="vote-button">
+	
+					<button type="submit">Vote</button>
+				</div>
+			</form>
+				<div class="vote-details">
+					<div class="totalVotes">
+	
+						<small th:text="'Total Points ' + ${totalPoints}"></small>
+					</div>
+					<div class="days-left">
+	
+						<small> 5 days left</small>
+					</div>
+				</div>
+    </div>
+
+</body>
+
+</html>
