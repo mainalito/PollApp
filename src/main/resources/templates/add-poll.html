@@ -14,9 +14,16 @@
 </head>
 
 <body>
+	<nav>
+		<ul>
+			<li><a href="index.html">Home</a></li>
+			<li><a href="result.html">Results</a></li>
+		</ul>
+	</nav>
+
 	<div class="container p-5">
 		<h1>Poll app web</h1>
-		<form action="#" th:action="@{/addResult}" method="post" th:object="${polls}">
+		<form action="#" th:action="@{/createPoll}" method="post" th:object="${polls}">
 			<div class="mb-3">
 				<label for="exampleInputEmail1" class="form-label">Title</label>
 				<input type="text" th:field="*{title}" class="form-control" id="exampleInputEmail1"

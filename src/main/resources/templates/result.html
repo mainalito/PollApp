@@ -7,20 +7,26 @@
     <title>Poll App</title>
     
     <link rel="stylesheet" th:href="@{/style.css}" />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   </head>
 
   <body>
+    <nav>
+      <ul>
+        <li><a  th:href="@{/}"><i class="fa-solid fa-house"></i></a></li>
+      </ul>
+    </nav>
     <div class="container">
       <div class="box">
         <h2 th:text="${polls.title}"></h2>
         <ul th:each="result: ${result}">
           <li th:text="${result.chosen} + ' - ' + ${result.points}"></li>
         </ul>
-        <div class="points" th:each="p: ${highestPoints}">
-          <ul>
+        <div class="points">
+          <ul  th:each="p: ${highestPoints}">
             <li
-              th:text="'The winner is ' +  ${p.chosen} + ' - ' + ${p.points}"
+              th:text="'Winner is ' +  ${p.chosen} + ' - ' + ${p.points}"
             ></li>
           </ul>
         </div>
@@ -55,6 +61,8 @@
             labels: data.xs,
             datasets: [
               {
+                // barThickness: 12,
+                // maxBarThickness: 24,
                 label: poll.title,
                 data: data.ys,
                 backgroundColor: [

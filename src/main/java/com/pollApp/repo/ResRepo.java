@@ -26,7 +26,7 @@ public interface ResRepo extends CrudRepository<Results, Long> {
     List<Results> fetchHighest(Long poll_id);
     
     @Query( value = "select * from results where points = ?1 and poll_id= ?2", nativeQuery = true )
-    Results fetchHighestPoints(int points, Long poll_id);
+    List <Results> fetchHighestPoints(int points, Long poll_id);
 
     @Query(
         value = "select * from results where  poll_id  = ?1", nativeQuery = true

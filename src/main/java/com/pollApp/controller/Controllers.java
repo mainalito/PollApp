@@ -67,7 +67,7 @@ public class Controllers {
 				ro.incrementVotes(rst.getChosen(), rst.getPoll().getId());
 			}
 		}
-	
+
 		return new ModelAndView("redirect:/addPoll/" + id);
 	}
 
@@ -93,10 +93,9 @@ public class Controllers {
 		return "poll-options";
 	}
 
-	@PostMapping("/addResult")
+	@PostMapping("/createPoll")
 	public ModelAndView sendPoll(@ModelAttribute("polls") Poll poll) {
 		serv.save(poll);
-		
 
 		return new ModelAndView("redirect:/");
 	}
@@ -104,26 +103,24 @@ public class Controllers {
 	@GetMapping("/fetchPoll/{id}")
 	public String showVotersResults(@PathVariable("id") long id, Model model) {
 
-		
 		Poll polls = repo.findById(id).get();
 		List<Results> result = ro.fetchByPid(id);
-		
-		//calculate total points
-		int total_points = ro.findByPid(id).stream().map(Results::getPoints).reduce(0,(a,b) -> a +b);
 
-		//find the winner with the highest points
-		int highest_points = ro.findByPid(id).stream().map(Results::getPoints).mapToInt(v -> v).max().orElseThrow(NoSuchElementException::new);
-		Results highest = ro.fetchHighestPoints(highest_points, id);
+		// calculate total points
+		int total_points = ro.findByPid(id).stream().map(Results::getPoints).reduce(0, (a, b) -> a + b);
 
-		//check if there is a draw
-		
-		// int points = ro.fetchPointsforChosen(result.getChosen(), result.getPoll().getId());
-		// System.out.println(points + " " + result.getChosen() +" " + result.getPoll().getId());
-		System.out.println("Total points for "+ polls.getTitle() + " ====== "+ total_points);
+		// find the winner with the highest points
+		int highest_points = ro.findByPid(id).stream().map(Results::getPoints).mapToInt(v -> v).max()
+				.orElseThrow(NoSuchElementException::new);
+		List<Results> highest = ro.fetchHighestPoints(highest_points, id);
+
+		model.addAttribute("highestPoints", highest);
+
+
 		model.addAttribute("result", result);
 		model.addAttribute("polls", polls);
 		model.addAttribute("totalPoints", total_points);
-		model.addAttribute("highestPoints", highest);
+
 		return "result";
 	}
 
