@@ -1,34 +1,69 @@
 package com.pollApp.controller;
 
-import java.util.Arrays;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.BinaryOperator;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.thymeleaf.util.MapUtils;
-
-import com.fasterxml.classmate.types.ResolvedRecursiveType;
 import com.pollApp.model.Poll;
 import com.pollApp.model.Results;
 import com.pollApp.repo.Repository;
 import com.pollApp.repo.ResRepo;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
+
 public class Controllers {
+
+	private static final String[] IP_HEADER_CANDIDATES = {
+			"X-Forwarded-For",
+			"Proxy-Client-IP",
+			"WL-Proxy-Client-IP",
+			"HTTP_X_FORWARDED_FOR",
+			"HTTP_X_FORWARDED",
+			"HTTP_X_CLUSTER_CLIENT_IP",
+			"HTTP_CLIENT_IP",
+			"HTTP_FORWARDED_FOR",
+			"HTTP_FORWARDED",
+			"HTTP_VIA",
+			"REMOTE_ADDR"
+	};
+	public static String getClientIpAddressIfServletRequestExist() {
+
+		if (RequestContextHolder.getRequestAttributes() == null) {
+			return "0.0.0.0";
+		}
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		for (String header: IP_HEADER_CANDIDATES) {
+			String ipList = request.getHeader(header);
+			if (ipList != null && ipList.length() != 0 && !"unknown".equalsIgnoreCase(ipList)) {
+				String ip = ipList.split(",")[0];
+				return ip;
+			}
+		}
+
+		return request.getRemoteAddr();
+	}
+
+
 	@Autowired
 	Repository repo;
 	@Autowired
@@ -51,7 +86,7 @@ public class Controllers {
 	}
 
 	@PostMapping("/poll/{id}/vote")
-	public ModelAndView poll(@PathVariable("id") long id, @ModelAttribute("results") Results rst) throws Exception {
+	public ModelAndView poll(@PathVariable("id") long id, @ModelAttribute("results") Results rst, HttpServletRequest request) throws Exception {
 
 		Optional<Poll> poll = repo.findById(id);
 
@@ -67,6 +102,11 @@ public class Controllers {
 				ro.incrementVotes(rst.getChosen(), rst.getPoll().getId());
 			}
 		}
+		String clientIP= "";
+		String ip = Optional.ofNullable(request.getHeader("X-FORWARDED-FOR")).orElse(request.getRemoteAddr());
+		if (ip.equals("0:0:0:0:0:0:0:1")) ip = "127.0.0.1";
+		Assert.isTrue(ip.chars().filter($ -> $ == '.').count() == 3, "Illegal IP: " + ip);
+		System.out.println("IP ADDRESS IS " + ip);
 
 		return new ModelAndView("redirect:/addPoll/" + id);
 	}
@@ -107,7 +147,7 @@ public class Controllers {
 		List<Results> result = ro.fetchByPid(id);
 
 		// calculate total points
-		int total_points = ro.findByPid(id).stream().map(Results::getPoints).reduce(0, (a, b) -> a + b);
+		int total_points = ro.findByPid(id).stream().map(Results::getPoints).reduce(0, Integer::sum);
 
 		// find the winner with the highest points
 		int highest_points = ro.findByPid(id).stream().map(Results::getPoints).mapToInt(v -> v).max()

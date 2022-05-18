@@ -47,7 +47,7 @@ public interface ResRepo extends CrudRepository<Results, Long> {
     @Transactional
     @Modifying
     @Query("update results set points = points + 1 where chosen=?1 and poll_id = ?2")
-    public void incrementVotes(String chosen, Long result_id);
+    void incrementVotes(String chosen, Long result_id);
 
     // @Query("update results set points = points - 1 where id = ?1 and chosen =
     // ?2")
